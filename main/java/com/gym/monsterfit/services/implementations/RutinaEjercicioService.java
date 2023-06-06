@@ -2,10 +2,13 @@ package com.gym.monsterfit.services.implementations;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.gym.monsterfit.entities.EjercicioEntity;
 import com.gym.monsterfit.entities.RutinaEjercicioEntity;
+import com.gym.monsterfit.entities.RutinaEntity;
 import com.gym.monsterfit.repositories.RutinaEjercicioRepository;
 import com.gym.monsterfit.services.interfaces.RutinaEjercicioServiceInterface;
 
@@ -44,5 +47,19 @@ public class RutinaEjercicioService implements RutinaEjercicioServiceInterface {
 		repository.deleteById(rutinaEjercicioId);
 	}
 
+
+	//TODO: add to interface
+	public void saveRoutine(LocalDate date, List<Integer> exerciseIds) {
+
+		List<RutinaEjercicioEntity> routines = exerciseIds.stream().map( id -> {
+			RutinaEjercicioEntity routine = new RutinaEjercicioEntity();
+			routine.setFecha(date);
+			routine.setEjercicio(new EjercicioEntity(id, null, null, null, null, null, null, null));
+			routine.setRutina(new RutinaEntity(id, null, null));
+			return routine;
+		}).collect(Collectors.toList());
+
+		repository.saveAll(routines);
+	}
    
 }

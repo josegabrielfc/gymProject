@@ -4,6 +4,8 @@ import com.gym.monsterfit.entities.EjercicioEntity;
 import com.gym.monsterfit.entities.RutinaEntity;
 import com.gym.monsterfit.repositories.EjercicioRepository;
 import com.gym.monsterfit.repositories.RutinaRepository;
+import com.gym.monsterfit.services.implementations.RutinaEjercicioService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,9 @@ public class EscogerRutinaController {
     
     @Autowired
     EjercicioRepository ejercicioRepository;
+
+    @Autowired
+    RutinaEjercicioService rutinaEjercicioService;
 
     @GetMapping
     public String mostrarFormulario(Model model) {
@@ -55,12 +60,10 @@ public class EscogerRutinaController {
     
     @PostMapping("/guardar")
     public String procesarFormRutina(
-            @RequestParam("inputDate") String fechaString,
-            @RequestParam("ejerciciosIds") Integer[] ejerciciosIds) {
-    	System.out.println("tipoId" +  " fecha: " + fechaString);
-    	for(int i = 0; i < ejerciciosIds.length; i++) {
-    		System.out.println(ejerciciosIds[i]);
-    	}
+            @RequestParam("inputDate") LocalDate fecha,
+            @RequestParam("ejerciciosIds") List<Integer> ejerciciosIds) {
+                
+                rutinaEjercicioService.saveRoutine(fecha, ejerciciosIds);
     	return "admin/asignarRutina";
     }
 
